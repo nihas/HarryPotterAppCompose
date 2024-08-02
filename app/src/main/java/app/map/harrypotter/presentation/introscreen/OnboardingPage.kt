@@ -51,10 +51,10 @@ fun OnboardingPage(
     }
 }
 
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = false)
 @Composable
 fun OnboardingPagePreview() {
-    HarryPotterTheme {
+    HarryPotterTheme(true) {
         OnboardingPage(page = pages[0])
     }
 }

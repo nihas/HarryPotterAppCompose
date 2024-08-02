@@ -6,9 +6,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import app.map.harrypotter.MainViewModel
-import app.map.harrypotter.presentation.home.Homescreen
+import app.map.harrypotter.presentation.home.HomeScreen
+import app.map.harrypotter.presentation.hpnavigator.HPNavigator
 import app.map.harrypotter.presentation.introscreen.IntroScreen
+import app.map.harrypotter.presentation.introscreen.IntroViewModel
 
 @Composable
 fun NavGraph(
@@ -22,8 +23,17 @@ fun NavGraph(
             startDestination = Route.IntroScreen.route
         ){
             composable(route = Route.IntroScreen.route){
-                val viewModel =  hiltViewModel<MainViewModel>()
-                IntroScreen()
+                val viewModel =  hiltViewModel<IntroViewModel>()
+                IntroScreen(viewModel::onEvent)
+            }
+        }
+
+        navigation(
+            route = Route.HomeNavigatorScreen.route,
+            startDestination = Route.HomeScreen.route
+        ) {
+            composable(route = Route.HomeScreen.route){
+                HomeScreen()
             }
         }
     }

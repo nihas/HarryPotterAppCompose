@@ -1,9 +1,8 @@
 package app.map.harrypotter.presentation.introscreen
 
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -23,49 +21,34 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import app.map.harrypotter.R
-import app.map.harrypotter.ui.theme.Grey300
-import app.map.harrypotter.ui.theme.Grey900
+import app.map.harrypotter.ui.theme.HarryPotterTheme
 import app.map.harrypotter.ui.theme.Teal200
-import app.map.harrypotter.ui.theme.Typography
 import app.map.harrypotter.utils.Constants.indicatorSize
 import app.map.harrypotter.utils.Constants.mediumPadding2
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun IntroScreen() {
+fun IntroScreen(
+    event: (IntroEvent) -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         val pagerState = rememberPagerState(initialPage = 0) { pages.size }
-
-        // Since button state depends on pager state, derivedState is used
-        val buttonState = remember {
-            derivedStateOf {
-                when (pagerState.currentPage) {
-                    0 -> listOf("", "Next")
-                    1 -> listOf("Back", "Next")
-                    2 -> listOf("Back", "Get Started")
-                    else -> listOf("", "")
-                }
-            }
-        }
 
         // Used for Paging
         HorizontalPager(state = pagerState) { index ->
@@ -82,35 +65,8 @@ fun IntroScreen() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            PageIndicator(
-                modifier = Modifier.width(50.dp),
-                pageSize = pages.size,
-                selectedPage = pagerState.currentPage
-            )
-
-//            Row(verticalAlignment = Alignment.CenterVertically) {
-//                val scope = rememberCoroutineScope()
-//
-//                if (buttonState.value[0].isNotEmpty()) {
-//                    NewsTextButton(text = buttonState.value[0], onClick = {
-//                        scope.launch {
-//                            pagerState.animateScrollToPage(page = pagerState.currentPage - 1)
-//                        }
-//                    })
-//                }
-//
-//                NewsButton(text = buttonState.value[1], onClick = {
-//                    scope.launch {
-//                        if (pagerState.currentPage == 2) {
-//                            event(OnboardingEvent.SaveAppEntry)
-//                        } else {
-//                            pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
-//                        }
-//                    }
-//                })
-//            }
             Box(modifier = Modifier.align(Alignment.CenterVertically)){
-                BottomSection(pagerState.currentPage)
+                BottomSection(pagerState,event)
             }
         }
 
@@ -135,56 +91,72 @@ fun PageIndicator(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Indicator(isSelected: Boolean) {
-    val width = animateDpAsState(targetValue = if (isSelected) 25.dp else 10.dp)
-
-    Box(
-        modifier = Modifier
-            .padding(1.dp)
-            .height(10.dp)
-            .width(width.value)
-            .clip(CircleShape)
-            .background(
-                if (isSelected) MaterialTheme.colorScheme.primary else Grey300.copy(alpha = 0.5f)
-            )
-    )
-}
-
-@Composable
-fun BottomSection(currentPager: Int) {
+fun BottomSection(pagerState: PagerState, event: (IntroEvent) -> Unit) {
     Row(
         modifier = Modifier
             .padding(bottom = 20.dp)
             .fillMaxWidth(),
-        horizontalArrangement = if (currentPager != 2) Arrangement.SpaceBetween else Arrangement.Center
+        horizontalArrangement = if (pagerState.currentPage != 2) Arrangement.SpaceBetween else Arrangement.Center
     ) {
 
-        if (currentPager == 2){
+        if (pagerState.currentPage == 2){
             OutlinedButton(
                 onClick = { },
                 shape = RoundedCornerShape(50), // = 40% percent
             ) {
                 Text(
                     text = "Get Started",
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 40.dp),
+                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 40.dp).clickable {
+                        if(pagerState.currentPage == 2){
+                            event(IntroEvent.SaveAppEntry)
+                        }
+                    },
                     color = Color.Gray
                 )
             }
         }else{
-            SkipNextButton("Skip",Modifier.padding(start = 20.dp))
-            SkipNextButton("Next",Modifier.padding(end = 20.dp))
+            val scope = rememberCoroutineScope()
+            BackNextButton("Back",Modifier.padding(start = 20.dp), onClick = {
+                scope.launch {
+                    pagerState.animateScrollToPage(page = pagerState.currentPage - 1)
+                }
+            })
+            PageIndicator(
+                modifier = Modifier.width(50.dp),
+                pageSize = pages.size,
+                selectedPage = pagerState.currentPage
+            )
+            BackNextButton("Next",Modifier.padding(end = 20.dp), onClick = {
+                scope.launch {
+                    pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
+                }
+            })
         }
 
     }
 }
 
 @Composable
-fun SkipNextButton(text: String, modifier: Modifier) {
-    Text(
-        text = text, color = Grey300, modifier = modifier, fontSize = 18.sp,
-        style = Typography.bodyMedium,
-        fontWeight = FontWeight.Medium
-    )
+fun BackNextButton(
+    text: String,
+    modifier: Modifier,
+    onClick: () -> Unit
+) {
+    TextButton(onClick = onClick) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
+            color = colorResource(id = R.color.placeholder)
+        )
+    }
+}
 
+@Preview(showSystemUi = false)
+@Composable
+fun IntroScreenPreview() {
+    HarryPotterTheme(true) {
+//        IntroScreen()
+    }
 }
