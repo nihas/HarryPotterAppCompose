@@ -4,11 +4,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 
-@HiltViewModel
-class HomeViewModel: ViewModel() {
+//@HiltViewModel
+//class HomeViewModel: ViewModel() {
 
-    var state = mutableStateOf(HomeState())
-        private set
+//    var state = mutableStateOf(HomeState())
+//        private set
 
 //    fun onEvent(event: HomeEvent){
 //        when(event){
@@ -23,4 +23,4 @@ class HomeViewModel: ViewModel() {
 //    private fun updateMaxScrollingValue(newValue: Int){
 //        state.value = state.value.copy(maxScrollingValue = newValue)
 //    }
-}
+//}
