@@ -28,3 +28,30 @@ val pages = listOf(
         image = R.drawable.ic_illustration_research
     ),
 )
+
+data class HomeCard(
+    val title: String,
+    val image: String
+)
+val homePages = listOf(
+    HomeCard(
+        title = "All Characters",
+        image = "https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg"
+    ),
+    HomeCard(
+        title = "Hogwards Students",
+        image = "https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg"
+    ),
+    HomeCard(
+        title = "Hogwarts Staff",
+        image = "https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg"
+    ),
+    HomeCard(
+        title = "Hogwarts Houses",
+        image = "https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg"
+    ),
+    HomeCard(
+        title = "Spells",
+        image = "https://img.freepik.com/free-photo/abstract-autumn-beauty-multi-colored-leaf-vein-pattern-generated-by-ai_188544-9871.jpg"
+    ),
+)

@@ -28,7 +28,7 @@ fun HPNavigator() {
         NavHost(
             navController = navController,
             startDestination = Route.HomeScreen.route,
-            modifier = Modifier.padding(bottom = bottomPadding)
+            modifier = Modifier.fillMaxSize()
         ) {
             composable(route = Route.HomeScreen.route) { backStackEntry ->
                 val viewModel: HomeViewModel = hiltViewModel()
