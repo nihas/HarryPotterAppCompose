@@ -29,11 +29,11 @@ fun NavGraph(
         }
 
         navigation(
-            route = Route.HomeNavigatorScreen.route,
-            startDestination = Route.HomeScreen.route
+            route = Route.HarryPotterNavigation.route,
+            startDestination = Route.HomeNavigatorScreen.route
         ) {
-            composable(route = Route.HomeScreen.route){
-                HomeScreen()
+            composable(route = Route.HomeNavigatorScreen.route){
+                HPNavigator()
             }
         }
     }

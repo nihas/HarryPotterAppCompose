@@ -25,7 +25,7 @@ class MainViewModel @Inject constructor(
     init {
         readAppEntry().onEach { shouldStartFromHomeScreen ->
             if(shouldStartFromHomeScreen){
-                _startDestination.value = Route.HomeScreen.route
+                _startDestination.value = Route.HarryPotterNavigation.route
             }else{
                 _startDestination.value = Route.AppStartNavigation.route
             }

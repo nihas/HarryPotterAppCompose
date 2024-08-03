@@ -1,9 +1,13 @@
 package app.map.harrypotter.presentation.hpnavigator
 
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,16 +22,19 @@ fun HPNavigator() {
     val navController = rememberNavController()
     val backStackState = navController.currentBackStackEntryAsState().value
 
-    NavHost(
-        navController = navController,
-        startDestination = Route.HomeScreen.route,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        composable(route = Route.HomeScreen.route) { backStackEntry ->
-            val viewModel: HomeViewModel = hiltViewModel()
+    Scaffold(modifier = Modifier.systemBarsPadding()){
+        val bottomPadding = it.calculateBottomPadding()
+
+        NavHost(
+            navController = navController,
+            startDestination = Route.HomeScreen.route,
+            modifier = Modifier.padding(bottom = bottomPadding)
+        ) {
+            composable(route = Route.HomeScreen.route) { backStackEntry ->
+                val viewModel: HomeViewModel = hiltViewModel()
 //            val articles = viewModel.news.collectAsLazyPagingItems()
-            HomeScreen()
-        }
+                HomeScreen()
+            }
 //        composable(route = Route.SearchScreen.route) {
 //            val viewModel: SearchViewModel = hiltViewModel()
 //            val state = viewModel.state.value
@@ -70,5 +77,7 @@ fun HPNavigator() {
 //                }
 //            )
 //        }
+        }
     }
+
 }
