@@ -3,6 +3,8 @@ package app.map.harrypotter.presentation.home
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,16 +15,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -60,36 +59,24 @@ fun HomeScreen(){
             fontFamily = CustomFontFamily
         )
         val pagerState = rememberPagerState(initialPage = 0) { homePages.size }
-        val matrix = remember {
-            ColorMatrix()
-        }
 
-        Scaffold(modifier = Modifier
-            .fillMaxSize()
-            .padding(vertical = 0.dp)) {
-
-            HorizontalPager(
-                state = pagerState,
-                contentPadding = PaddingValues(50.dp)
-            ) {index ->
-                SingleCardView(index,pagerState,matrix)
-            }
+        HorizontalPager(
+            state = pagerState,
+            contentPadding = PaddingValues(50.dp)
+        ) {index ->
+            SingleCardView(index,pagerState)
         }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun SingleCardView(index: Int, pagerState: PagerState, matrix: ColorMatrix) {
+fun SingleCardView(index: Int, pagerState: PagerState) {
     val pageOffset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
     val imageSize by animateFloatAsState(
         targetValue = if (pageOffset != 0.0f) 0.75f else 1f,
         animationSpec = tween(durationMillis = 300)
     )
-
-    LaunchedEffect(key1 = imageSize) {
-        matrix.setToSaturation(if(pageOffset != 0.0f) 0f else 1f)
-    }
 
     Card(
         shape = RoundedCornerShape(10.dp),
@@ -109,17 +96,42 @@ fun SingleCardView(index: Int, pagerState: PagerState, matrix: ColorMatrix) {
             ).value
         }
     ) {
-        AsyncImage(
-            modifier = Modifier.fillMaxSize(),
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(homePages[index].image)
-                .crossfade(true)
-                .scale(Scale.FILL)
-                .build(),
-            contentDescription = "Image",
-            contentScale = ContentScale.Crop,
-            colorFilter = ColorFilter.colorMatrix(matrix)
+        val CustomFontFamily = FontFamily(
+            Font(R.font.harryp)
         )
+
+        Box(modifier = Modifier.fillMaxSize()) {
+            AsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(homePages[index].image)
+                    .crossfade(true)
+                    .scale(Scale.FILL)
+                    .build(),
+                contentDescription = "Image",
+                contentScale = ContentScale.Crop
+            )
+
+            Box(modifier = Modifier.fillMaxSize().background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Black.copy(alpha = 0.5f),
+                        Color.Transparent,
+                    )
+                )
+            )) {
+                Text(
+                    text = homePages[index].title,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 54.sp,
+                    fontFamily = CustomFontFamily,
+                    lineHeight = 54.sp,
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(16.dp)
+                )
+            }
+        }
     }
 }
 
