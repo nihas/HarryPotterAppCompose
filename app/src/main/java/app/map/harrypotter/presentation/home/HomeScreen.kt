@@ -14,6 +14,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +43,7 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(){
+fun HomeScreen(navigateToList: () -> Unit) {
     val CustomFontFamily = FontFamily(
         Font(R.font.harryp)
     )
@@ -64,14 +65,16 @@ fun HomeScreen(){
             state = pagerState,
             contentPadding = PaddingValues(50.dp)
         ) {index ->
-            SingleCardView(index,pagerState)
+            SingleCardView(index,pagerState) {
+                navigateToList()
+            }
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
-fun SingleCardView(index: Int, pagerState: PagerState) {
+fun SingleCardView(index: Int, pagerState: PagerState, onclick: () -> Unit) {
     val pageOffset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
     val imageSize by animateFloatAsState(
         targetValue = if (pageOffset != 0.0f) 0.75f else 1f,
@@ -94,7 +97,8 @@ fun SingleCardView(index: Int, pagerState: PagerState) {
                 stop = 1f.dp,
                 fraction = 1f - pageOffset.absoluteValue.coerceIn(0f, 1f)
             ).value
-        }
+        },
+        onClick = onclick
     ) {
         val CustomFontFamily = FontFamily(
             Font(R.font.harryp)
@@ -139,6 +143,8 @@ fun SingleCardView(index: Int, pagerState: PagerState) {
 @Composable
 fun IntroScreenPreview() {
     HarryPotterTheme(true) {
-        HomeScreen()
+        HomeScreen {
+
+        }
     }
 }

@@ -1,8 +1,9 @@
 package app.map.harrypotter.presentation.home
 
+import app.map.harrypotter.domain.model.CharactersItem
+
 data class HomeState(
-    val newsTicker: String = "",
     val isLoading: Boolean = false,
-    val scrollValue: Int = 0,
-    val maxScrollingValue: Int = 0
+    val characters: List<CharactersItem?>? = emptyList(),
+    val error: Exception? = null,
 )

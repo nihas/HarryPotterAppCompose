@@ -31,7 +31,7 @@ data class CharactersItem(
 
 data class Wand(
 	val core: String? = null,
-	val length: Int? = null,
+	val length: Double? = null,
 	val wood: String? = null
 )
 

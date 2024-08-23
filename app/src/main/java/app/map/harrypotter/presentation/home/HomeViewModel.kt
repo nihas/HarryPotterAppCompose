@@ -2,10 +2,8 @@ package app.map.harrypotter.presentation.home
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import app.map.harrypotter.domain.usecases.characters.GetCharacters
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,11 +14,10 @@ class HomeViewModel @Inject constructor(
     var state = mutableStateOf(HomeState())
         private set
 
-    fun getCharacters(){
-        viewModelScope.launch {
-            getCharactersUseCase(arrayListOf())
-        }
-    }
+    // Define a MutableStateFlow to hold the characters
+//    private val _characters = MutableStateFlow(NewsUiState())
+//    val characters: StateFlow<NewsUiState> get() = _characters
+
 
 //    fun fetchAllMyProducts(){
 //        viewModelScope.launch {
@@ -54,9 +51,9 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun updateScrollValue(newValue: Int){
-        state.value = state.value.copy(scrollValue = newValue)
+//        state.value = state.value.copy(scrollValue = newValue)
     }
     private fun updateMaxScrollingValue(newValue: Int){
-        state.value = state.value.copy(maxScrollingValue = newValue)
+//        state.value = state.value.copy(maxScrollingValue = newValue)
     }
 }
