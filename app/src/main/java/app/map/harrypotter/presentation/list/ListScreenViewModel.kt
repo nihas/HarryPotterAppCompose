@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.map.harrypotter.domain.common.fold
 import app.map.harrypotter.domain.usecases.characters.GetCharacters
+import app.map.harrypotter.domain.usecases.characters.HarryPotterUseCases
 import app.map.harrypotter.presentation.home.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListScreenViewModel @Inject constructor(
-    private val getCharactersUseCase: GetCharacters
+    private val harryPotterUseCases: HarryPotterUseCases
 ):ViewModel() {
 
     var state = mutableStateOf(HomeState())
@@ -21,7 +22,7 @@ class ListScreenViewModel @Inject constructor(
     fun getCharacters(){
         state.value = state.value.copy(isLoading = true)
         viewModelScope.launch {
-            getCharactersUseCase().fold(
+            harryPotterUseCases.getCharacters().fold(
                 onSuccess = {
                     state.value = state.value.copy(
                         isLoading = false,
@@ -39,10 +40,48 @@ class ListScreenViewModel @Inject constructor(
         }
     }
 
+    fun selectedCharacters(value: Int){
+        state.value = state.value.copy(isLoading = true)
+        viewModelScope.launch {
+            harryPotterUseCases.selectArticle(value).fold(
+                onSuccess = {
+
+                },
+                onFailure = {
+
+                }
+            )
+        }
+    }
+
     fun onEvent(event: ListScreenEvent){
         when(event){
-            is ListScreenEvent.UpdateScrollValue -> updateScrollValue(event.newValue)
-//            is ListScreenEvent.UpdateMaxScrollingValue -> updateScrollValue(event.newValue)
+            ListScreenEvent.AllCharacters -> getCharacters()
+            ListScreenEvent.Houses -> getCharacters()
+            ListScreenEvent.Spells -> getCharacters()
+            ListScreenEvent.Staffs -> getCharacters()
+            ListScreenEvent.Students -> getStudents()
+        }
+    }
+
+    private fun getStudents() {
+        state.value = state.value.copy(isLoading = true)
+        viewModelScope.launch {
+            harryPotterUseCases.getStudents().fold(
+                onSuccess = {
+                    state.value = state.value.copy(
+                        isLoading = false,
+                        characters= it,
+                        error = null
+                    )
+                },
+                onFailure = {
+                    state.value = state.value.copy(
+                        isLoading = false,
+                        error = it
+                    )
+                }
+            )
         }
     }
 

@@ -17,10 +17,10 @@ interface HarryPotterApi {
     ): Characters
 
     @GET("characters/students")
-    suspend fun getHogwartsStudents(): Characters
+    suspend fun getHogwartsStudents(): List<CharactersItem?>
 
     @GET("characters/staff")
-    suspend fun getHogwartsStaff(): Characters
+    suspend fun getHogwartsStaff(): List<CharactersItem?>
 
     @GET("characters/house/{house}")
     suspend fun getCharactersByHouse(

@@ -1,6 +1,12 @@
 package app.map.harrypotter.di
 
 import app.map.harrypotter.data.remote.api.HarryPotterApi
+import app.map.harrypotter.domain.repository.HarryPotterRepository
+import app.map.harrypotter.domain.usecases.characters.GetCharacters
+import app.map.harrypotter.domain.usecases.characters.GetStaffs
+import app.map.harrypotter.domain.usecases.characters.GetStudents
+import app.map.harrypotter.domain.usecases.characters.HarryPotterUseCases
+import app.map.harrypotter.domain.usecases.characters.SelectCharacter
 import app.map.harrypotter.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -35,5 +41,18 @@ class AppModule {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesHarryPotterUseCases(
+        harryPotterRepository: HarryPotterRepository
+    ): HarryPotterUseCases{
+        return HarryPotterUseCases(
+            getCharacters = GetCharacters(harryPotterRepository),
+            selectArticle = SelectCharacter(harryPotterRepository),
+            getStudents = GetStudents(harryPotterRepository),
+            getSttafs = GetStaffs(harryPotterRepository)
+        )
     }
 }

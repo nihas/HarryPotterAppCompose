@@ -8,12 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import app.map.harrypotter.domain.common.toError
 import app.map.harrypotter.presentation.CharacterCard
-import app.map.harrypotter.ui.component.ErrorScreen
+import app.map.harrypotter.presentation.component.ErrorScreen
 import com.bikcodeh.newsapp.ui.component.LoadingScreen
 import kotlin.reflect.KFunction1
 
 @Composable
-fun ListScreen(event: KFunction1<ListScreenEvent, Unit>, viewModel: ListScreenViewModel) {
+fun ListScreen(
+    event: KFunction1<ListScreenEvent, Unit>,
+    viewModel: ListScreenViewModel
+) {
 // Collect the characters Flow as State
 //    val charactersState by viewModel.characters.collectAsState()
     val mainState by viewModel.state

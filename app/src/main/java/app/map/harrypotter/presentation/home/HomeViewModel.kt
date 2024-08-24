@@ -3,12 +3,13 @@ package app.map.harrypotter.presentation.home
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import app.map.harrypotter.domain.usecases.characters.GetCharacters
+import app.map.harrypotter.domain.usecases.characters.HarryPotterUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getCharactersUseCase: GetCharacters
+    private val harryPotterUseCases: HarryPotterUseCases
 ): ViewModel() {
 
     var state = mutableStateOf(HomeState())

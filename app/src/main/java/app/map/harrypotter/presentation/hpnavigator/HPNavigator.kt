@@ -14,7 +14,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import app.map.harrypotter.domain.model.CharactersItem
 import app.map.harrypotter.presentation.home.HomeScreen
-import app.map.harrypotter.presentation.home.HomeViewModel
 import app.map.harrypotter.presentation.list.ListScreen
 import app.map.harrypotter.presentation.list.ListScreenViewModel
 import app.map.harrypotter.presentation.navgraph.Route
@@ -32,58 +31,20 @@ fun HPNavigator() {
             startDestination = Route.HomeScreen.route,
             modifier = Modifier.fillMaxSize()
         ) {
+            //HomeScreen
             composable(route = Route.HomeScreen.route) { backStackEntry ->
-                val viewModel: HomeViewModel = hiltViewModel()
-//            val articles = viewModel.news.collectAsLazyPagingItems()
                 HomeScreen {
                     navigateToList(navController = navController)
                 }
             }
-
-//        composable(route = Route.SearchScreen.route) {
-//            val viewModel: SearchViewModel = hiltViewModel()
-//            val state = viewModel.state.value
-//            OnBackClickStateSaver(navController = navController)
-//            SearchScreen(
-//                state = state,
-//                event = viewModel::onEvent,
-//                navigateToDetails = { article ->
-//                    navigateToDetails(
-//                        navController = navController,
-//                        article = article
-//                    )
-//                }
-//            )
-//        }
-        composable(route = Route.ListScreen.route) {
-            val viewModel: ListScreenViewModel = hiltViewModel()
-            OnBackClickStateSaver(navController = navController)
-//            navController.previousBackStackEntry?.savedStateHandle?.get<CharactersItem?>("article")
-//                ?.let { article ->
-            ListScreen(
-//                        article = article,
-                viewModel= viewModel,
-                event = viewModel::onEvent,
-//                        navigateUp = { navController.navigateUp() },
-//                        sideEffect = viewModel.sideEffect
-            )
-//                }
-
-        }
-//        composable(route = Route.BookmarkScreen.route) {
-//            val viewModel: BookmarkViewModel = hiltViewModel()
-//            val state = viewModel.state.value
-//            OnBackClickStateSaver(navController = navController)
-//            BookmarkScreen(
-//                state = state,
-//                navigateToDetails = { article ->
-//                    navigateToDetails(
-//                        navController = navController,
-//                        article = article
-//                    )
-//                }
-//            )
-//        }
+            //ListScreen
+            composable(route = Route.ListScreen.route) {
+                val viewModel: ListScreenViewModel = hiltViewModel()
+                ListScreen(
+                    event = viewModel::onEvent,
+                    viewModel= viewModel
+                )
+            }
         }
     }
 
