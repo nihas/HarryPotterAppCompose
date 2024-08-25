@@ -3,6 +3,7 @@ package app.map.harrypotter.di
 import app.map.harrypotter.data.remote.api.HarryPotterApi
 import app.map.harrypotter.domain.repository.HarryPotterRepository
 import app.map.harrypotter.domain.usecases.characters.GetCharacters
+import app.map.harrypotter.domain.usecases.characters.GetSpells
 import app.map.harrypotter.domain.usecases.characters.GetStaffs
 import app.map.harrypotter.domain.usecases.characters.GetStudents
 import app.map.harrypotter.domain.usecases.characters.HarryPotterUseCases
@@ -50,9 +51,10 @@ class AppModule {
     ): HarryPotterUseCases{
         return HarryPotterUseCases(
             getCharacters = GetCharacters(harryPotterRepository),
-            selectArticle = SelectCharacter(harryPotterRepository),
+            selectCharacters = SelectCharacter(harryPotterRepository),
             getStudents = GetStudents(harryPotterRepository),
-            getSttafs = GetStaffs(harryPotterRepository)
+            getStaffs = GetStaffs(harryPotterRepository),
+            getSpells = GetSpells(harryPotterRepository)
         )
     }
 }

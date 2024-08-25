@@ -19,14 +19,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.map.harrypotter.domain.model.CharactersItem
+import app.map.harrypotter.domain.model.SpellsItem
 import app.map.harrypotter.ui.theme.HarryPotterTheme
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun CharacterCard(
+fun SpellsCard(
     modifier: Modifier = Modifier,
-    item: CharactersItem,
+    item: SpellsItem,
     onClick: (() -> Unit)? = null
 ) {
 
@@ -40,19 +41,6 @@ fun CharacterCard(
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            // Profile Image
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(item.image)
-                    .crossfade(true)
-                    .build(),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(64.dp) // Adjust size as needed
-                    .background(MaterialTheme.colorScheme.surface) // Optional: to add background color
-            )
-
-            Spacer(modifier = Modifier.width(16.dp))
 
             // Title and Description
             Column(
@@ -65,7 +53,7 @@ fun CharacterCard(
                     fontSize = 20.sp // Adjust font size as needed
                 )
                 Text(
-                    text = item.house ?: String(),
+                    text = item.description ?: String(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontSize = 16.sp // Adjust font size as needed
                 )
@@ -115,13 +103,13 @@ fun CharacterCard(
 
 @Preview(showBackground = true)
 @Composable
-fun CharacterCardPreview() {
+fun SpellsCardPreview() {
     HarryPotterTheme(dynamicColor = false) {
-        CharacterCard(
-            item= CharactersItem(
+        SpellsCard(
+            item= SpellsItem(
                 name = "Hello",
-                image = "https://ichef.bbci.co.uk/live-experience/cps/624/cpsprodpb/11787/production/_124395517_bbcbreakingnewsgraphic.jpg",
-                patronus = "Haa"
+                description = "Its A description",
+                id = "Haa"
             )
         )
     }

@@ -9,6 +9,12 @@ class SelectCharacter @Inject constructor(
     private val harryPotterRepository: HarryPotterRepository
 ) {
     suspend  operator fun invoke(value: Int): Result<List<CharactersItem?>> {
-        return  harryPotterRepository.getSelectedCharacter(value)
+        return  when(value){
+            0 -> harryPotterRepository.getAllCharacters()
+            1 -> harryPotterRepository.getStudents()
+            2 -> harryPotterRepository.getStaffs()
+            3 -> harryPotterRepository.getHouses()
+            else -> harryPotterRepository.getAllCharacters()
+        }
     }
 }

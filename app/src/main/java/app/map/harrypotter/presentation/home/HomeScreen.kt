@@ -43,7 +43,7 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(navigateToList: () -> Unit) {
+fun HomeScreen(navigateToList: (index: Int) -> Unit) {
     val CustomFontFamily = FontFamily(
         Font(R.font.harryp)
     )
@@ -66,7 +66,7 @@ fun HomeScreen(navigateToList: () -> Unit) {
             contentPadding = PaddingValues(50.dp)
         ) {index ->
             SingleCardView(index,pagerState) {
-                navigateToList()
+                navigateToList(index)
             }
         }
     }

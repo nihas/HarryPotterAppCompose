@@ -12,7 +12,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import app.map.harrypotter.domain.model.CharactersItem
 import app.map.harrypotter.presentation.home.HomeScreen
 import app.map.harrypotter.presentation.list.ListScreen
 import app.map.harrypotter.presentation.list.ListScreenViewModel
@@ -33,17 +32,21 @@ fun HPNavigator() {
         ) {
             //HomeScreen
             composable(route = Route.HomeScreen.route) { backStackEntry ->
-                HomeScreen {
-                    navigateToList(navController = navController)
+                HomeScreen { indexCard ->
+                    navigateToList(navController = navController, indexCard = indexCard)
                 }
             }
             //ListScreen
             composable(route = Route.ListScreen.route) {
                 val viewModel: ListScreenViewModel = hiltViewModel()
-                ListScreen(
-                    event = viewModel::onEvent,
-                    viewModel= viewModel
-                )
+                navController.previousBackStackEntry?.savedStateHandle?.get<Int?>("index")
+                    ?.let { index ->
+                        ListScreen(
+                            event = viewModel::onEvent,
+                            viewModel = viewModel,
+                            selectedCardIndex= index
+                        )
+                    }
             }
         }
     }
@@ -65,8 +68,8 @@ private fun navigateToHome(navController: NavController) {
     )
 }
 
-private fun navigateToList(navController: NavController, article: CharactersItem? = null) {
-    navController.currentBackStackEntry?.savedStateHandle?.set("article", article)
+private fun navigateToList(navController: NavController, indexCard: Int? = null) {
+    navController.currentBackStackEntry?.savedStateHandle?.set("index", indexCard)
     navController.navigate(
         route = Route.ListScreen.route
     )

@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import app.map.harrypotter.domain.common.toError
 import app.map.harrypotter.presentation.CharacterCard
+import app.map.harrypotter.presentation.SpellsCard
 import app.map.harrypotter.presentation.component.ErrorScreen
 import com.bikcodeh.newsapp.ui.component.LoadingScreen
 import kotlin.reflect.KFunction1
@@ -15,14 +16,20 @@ import kotlin.reflect.KFunction1
 @Composable
 fun ListScreen(
     event: KFunction1<ListScreenEvent, Unit>,
-    viewModel: ListScreenViewModel
+    viewModel: ListScreenViewModel,
+    selectedCardIndex: Int
 ) {
-// Collect the characters Flow as State
-//    val charactersState by viewModel.characters.collectAsState()
+    // Collect the characters Flow as State
     val mainState by viewModel.state
 
     LaunchedEffect(key1 = true) {
-        viewModel.getCharacters()
+        when(selectedCardIndex){
+            0 -> event(ListScreenEvent.AllCharacters)
+            1 -> event(ListScreenEvent.Students)
+            2 -> event(ListScreenEvent.Staffs)
+            3 -> event(ListScreenEvent.Houses)
+            4 -> event(ListScreenEvent.Spells)
+        }
     }
 
     if (mainState.isLoading) {
@@ -41,45 +48,12 @@ fun ListScreen(
                 })
             }
         }
+        items(mainState.spells?.count() ?: 0) { index ->
+            mainState.spells?.get(index)?.let {
+                SpellsCard(item = it, onClick = {
+//                    navController.navigate(Screen.Detail.passNewsIndex(index))
+                })
+            }
+        }
     }
 }
-
-//@Composable
-//fun CharacterCard(name: String, description: String, image: String) {
-//    Card(
-//        modifier = Modifier
-//            .padding(10.dp)
-//            .fillMaxWidth()
-//            .wrapContentHeight(),
-//        shape = MaterialTheme.shapes.medium,
-//        elevation = CardDefaults.cardElevation(),
-////        cardColor = MaterialTheme.colors.surface
-//    ) {
-//        Row(
-//            verticalAlignment = Alignment.CenterVertically,
-//        ) {
-//            AsyncImage(
-//                modifier = Modifier.size(130.dp).padding(8.dp),
-//                model = ImageRequest.Builder(LocalContext.current)
-//                    .data(image)
-//                    .crossfade(true)
-//                    .scale(Scale.FILL)
-//                    .build(),
-//                contentDescription = "Image",
-//                contentScale = ContentScale.Crop
-//            )
-//
-//            Column(Modifier.padding(8.dp)) {
-//                Text(
-//                    text = name,
-//                    style = MaterialTheme.typography.headlineMedium,
-//                    color = MaterialTheme.colorScheme.background,
-//                )
-//                Text(
-//                    text = description,
-//                    style = MaterialTheme.typography.bodyMedium,
-//                )
-//            }
-//        }
-//    }
-//}

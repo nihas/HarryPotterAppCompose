@@ -19,10 +19,10 @@ class ListScreenViewModel @Inject constructor(
     var state = mutableStateOf(HomeState())
         private set
 
-    fun getCharacters(){
+    fun GetSelectedCharacters(value: Int){
         state.value = state.value.copy(isLoading = true)
         viewModelScope.launch {
-            harryPotterUseCases.getCharacters().fold(
+            harryPotterUseCases.selectCharacters(value).fold(
                 onSuccess = {
                     state.value = state.value.copy(
                         isLoading = false,
@@ -35,20 +35,6 @@ class ListScreenViewModel @Inject constructor(
                         isLoading = false,
                         error = it
                     )
-                }
-            )
-        }
-    }
-
-    fun selectedCharacters(value: Int){
-        state.value = state.value.copy(isLoading = true)
-        viewModelScope.launch {
-            harryPotterUseCases.selectArticle(value).fold(
-                onSuccess = {
-
-                },
-                onFailure = {
-
                 }
             )
         }
@@ -56,22 +42,22 @@ class ListScreenViewModel @Inject constructor(
 
     fun onEvent(event: ListScreenEvent){
         when(event){
-            ListScreenEvent.AllCharacters -> getCharacters()
-            ListScreenEvent.Houses -> getCharacters()
-            ListScreenEvent.Spells -> getCharacters()
-            ListScreenEvent.Staffs -> getCharacters()
-            ListScreenEvent.Students -> getStudents()
+            ListScreenEvent.AllCharacters -> GetSelectedCharacters(0)
+            ListScreenEvent.Students -> GetSelectedCharacters(1)
+            ListScreenEvent.Staffs -> GetSelectedCharacters(2)
+            ListScreenEvent.Houses -> GetSelectedCharacters(3)
+            ListScreenEvent.Spells -> getSpells()
         }
     }
 
-    private fun getStudents() {
+    private fun getSpells() {
         state.value = state.value.copy(isLoading = true)
         viewModelScope.launch {
-            harryPotterUseCases.getStudents().fold(
+            harryPotterUseCases.getSpells().fold(
                 onSuccess = {
                     state.value = state.value.copy(
                         isLoading = false,
-                        characters= it,
+                        spells = it,
                         error = null
                     )
                 },
@@ -83,9 +69,5 @@ class ListScreenViewModel @Inject constructor(
                 }
             )
         }
-    }
-
-    private fun updateScrollValue(newValue: Int){
-//        state.value = state.value.copy(scrollValue = newValue)
     }
 }

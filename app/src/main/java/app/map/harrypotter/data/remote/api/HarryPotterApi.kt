@@ -3,6 +3,7 @@ package app.map.harrypotter.data.remote.api
 import app.map.harrypotter.domain.model.Characters
 import app.map.harrypotter.domain.model.CharactersItem
 import app.map.harrypotter.domain.model.Spells
+import app.map.harrypotter.domain.model.SpellsItem
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -25,8 +26,8 @@ interface HarryPotterApi {
     @GET("characters/house/{house}")
     suspend fun getCharactersByHouse(
         @Path("house") house: String,
-    ): Characters
+    ): List<CharactersItem?>
 
     @GET("spells")
-    suspend fun getAllSpells(): Spells
+    suspend fun getAllSpells(): List<SpellsItem?>
 }

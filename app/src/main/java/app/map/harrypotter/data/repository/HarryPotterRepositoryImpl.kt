@@ -4,6 +4,7 @@ import app.map.harrypotter.data.remote.api.HarryPotterApi
 import app.map.harrypotter.domain.common.Result
 import app.map.harrypotter.domain.common.makeSafeRequest
 import app.map.harrypotter.domain.model.CharactersItem
+import app.map.harrypotter.domain.model.SpellsItem
 import app.map.harrypotter.domain.repository.HarryPotterRepository
 import javax.inject.Inject
 
@@ -28,12 +29,15 @@ class HarryPotterRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getSelectedCharacter(selectedChar: Int): Result<List<CharactersItem?>> {
+    override suspend fun getHouses(): Result<List<CharactersItem?>> {
         return makeSafeRequest {
-            when(selectedChar){
-                0 -> harryPotterApi.getAllCharacters()
-                else -> harryPotterApi.getAllCharacters()
-            }
+            harryPotterApi.getCharactersByHouse("Gryffindor")
+        }
+    }
+
+    override suspend fun getSpells(): Result<List<SpellsItem?>> {
+        return makeSafeRequest {
+            harryPotterApi.getAllSpells()
         }
     }
 }
